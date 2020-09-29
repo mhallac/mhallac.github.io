@@ -110,6 +110,21 @@
                 </figcaption>
             </figure>
         </div>
+
+        <div class="gallery">
+            <figure>
+                <img src="outputs/xderk.jpg"> 
+                <figcaption>
+                    X derivative of gaussian kernel
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/yderk.jpg"> 
+                <figcaption>
+                    Y derivative of gaussian kernel
+                </figcaption>
+            </figure>
+        </div>
         <h4>
             Image Straightening
         </h4>
@@ -281,11 +296,20 @@
                 </figcaption>
             </figure>
         </div>
+        <p>The result of trying to sharpen an already sharpened image is that the image appears darker, and appears as more of an outline than an image . In the case of black and white images, this does make it look sharper. An example of applying the filter three times is shown on the pinapple below</p>
+        <div class="gallery">
+        <figure>
+            <img src="outputs/pineapple_out2.jpg"> 
+            <figcaption>
+                Pineapple after 3 filters
+            </figcaption>
+        </figure>
+    </div>
         <h4>
             Hybrid Images
         </h4>
         <p>
-            Hybrid images are images that look like one thing from up close, and something different from far away. This affect is achieved by taking the high frequency components of one image and the low frequency components of another image and stacking them. From up close the viewer notices the high frequencies, and from far away the viewer can only make out the low frequencies. Here are some examples of such images.
+            Hybrid images are images that look like one thing from up close, and something different from far away. This affect is achieved by taking the high frequency components of one image and the low frequency components of another image and stacking them. From up close the viewer notices the high frequencies, and from far away the viewer can only make out the low frequencies. Here are some examples of such images. This is based on a paper <a href="http://olivalab.mit.edu/publications/OlivaTorralb_Hybrid_Siggraph06.pdf">here</a>
         </p>
         <div class="gallery">
             <figure>
@@ -396,7 +420,30 @@
             </figure>
     
         </div>
-
+        <h5>Failure case: Pineapple under the sea</h5>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/pineapple_bw.jpg"> 
+                <figcaption>
+                    Pineapple
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="inputs/coral.jpg"> 
+                <figcaption>
+                    Coral
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/pinapplecoral.jpg"> 
+                <figcaption>
+                    Pineapple and Coral
+                </figcaption>
+            </figure>
+        </div>
+        <p>
+            This is a failure case because from a distance, the pineapple is not very distinguishable as more than just an outline. This is because the pineapple contained a lot of high frequency content, and after being passed through a low pass filter, that content went away. This shows that high frequency content does not work well for the background of these types of images.
+        </p>
 
         <h4>
             Bells & Whistles: Using color to enhance the effect
@@ -441,7 +488,7 @@
             Multiresolution Blending
         </h4>
         <p>
-            The Gaussian and Laplacian stacks in the previous section can be used to create smooth splines. 
+            The Gaussian and Laplacian stacks in the previous section can be used to create smooth splines, as described in the paper <a href="http://persci.mit.edu/pub_pdfs/spline83.pdf">here</a>. 
         </p>
         <div class="gallery">
             <figure>
