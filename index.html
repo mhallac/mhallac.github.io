@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Project 2 - Matthew Hallac</title>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+    <div class="wrapper">
+        <div class="navbar">
+            <ul>
+                <li><a href="#frequencies">Fun with Frequencies</a></li>
+                <li><a href="#filters">Fun with Filters</a></li>
+                <li><a href="#overview">Overview</a></li>
+                
+              </ul>
+        </div>
+        <h1>
+            Project 2: Fun with Filters and Frequencies!
+        </h1>
+        <h2>
+            Matthew Hallac
+        </h2>
+        <h3 id="overview">
+            Overview
+        </h3>
+        <p>
+            In this project, I explore the properties of filters and frequencies when applied to different images, and use the techniques described to create cool and interesting images. Enjoy!
+        </p>
+        <h3 id="filters">
+            Fun with Filters
+        </h3>
+        <h4>
+            Finite Difference Operator
+        </h4>
+        <p>
+            Let's start with our image of the cameraman. We can apply the finite difference operator in the x and y direction as a filter by convolving it with the original image to get the partial derivatives of the image in the x and y direction.
+        </p>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/cameraman.png"> 
+                <figcaption>
+                    Original cameraman image
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/dx_cm.png"> 
+                <figcaption>
+                    Cameraman x derivative
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/dy_cm.png"> 
+                <figcaption>
+                    Cameraman y derivative
+                </figcaption>
+            </figure>
+        </div>
+        <p>
+           We can now create a gradient magnitude image, which will be an effective edge detector! To compute the gradient magnitude, we first get the image of the partial derivative in the x direction, then get the image of the partial derivative in the y direction. Then, for each pixel, we compute the gradient magnitude at that pixel as in the equation below, where f_x is the partial derivative in the x direction and f_y is the partial derivative in the y direction.
+        </p>
+        <img src="gradmag.PNG" style="margin-left: auto; margin-right: auto; display: block;">
+        <p>
+            Once we have the gradient magnitude image, we can increase the contrast by taking all the pixels with a value above a certain threshold and make them white, and make all other pixels black.
+        </p>
+        <div class="gallery">
+            <figure>
+                <img src="outputs/cm_out_nothresh.png"> 
+                <figcaption>
+                    Cameraman gradient magnitude image
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/cameraman_out.png"> 
+                <figcaption>
+                    Camerman gradient magnitude with a threshold of 0.25
+                </figcaption>
+            </figure>
+        </div>
+        <h4>
+            Derivative of Gaussian Filter
+        </h4>
+        <p>
+            This makes for a fairly good edge detector, but we can make it better by blurring the image using a gaussian filter before we take the gradient magnitude. This smooths the edges over a longer distance, and makes the edges thicker.
+        </p>
+        <div class="gallery">
+            <figure>
+                <img src="outputs/gauss_map.jpg"> 
+                <figcaption>
+                    Heat map of a 2d gaussian with sigma = 2
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/gauss_fig.png"> 
+                <figcaption>
+                    3d representation of a 2d gaussian with <br>sigma = 4
+                </figcaption>
+            </figure>
+        </div>
+        <div class="gallery">
+            <figure>
+                <img src="outputs/cm_blurred.jpg"> 
+                <figcaption>
+                    Cameraman blurred with a gaussian where sigma =  2
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/cameraman_smooth_out.png"> 
+                <figcaption>
+                    Result of apply edge detection in the previous section to the blurred cameraman
+                </figcaption>
+            </figure>
+        </div>
+        <h4>
+            Image Straightening
+        </h4>
+        <p>
+            Oftentimes the photos we take are not straight, which most people fix by manually rotating the image to fix it. For this part, I wrote an algorithm which finds a rotation that will yield the highest amount of horizontal and vertical lines, automating the process of rotating an image to the correct angle, as shown in the sample images below. For each image, the algorithm
+            <ol>
+                <li>Generated a list of 50 possible angles between a user specified range</li>
+                <li>Applyed a gaussian with sigma 2 to blur the image</li>
+                <li>For each potential angle, </li>
+                <ol style="list-style-type: lower-alpha;">
+                    <li>Rotate the image by the proposed amount</li>
+                    <li>Find the angle of the gradient for each pixel</li>
+                    <li>Count the number of angles that are 0 and 90 degrees</li>
+                </ol>
+                <li>Return the angle of rotation which had the highest number of pixels with a gradient 0 or 90 degrees</li>
+            </ol> 
+            Here are the results of the algorithm applied to some interesting images:
+        </p>
+        <h5>Facade</h5>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/facade.jpg"> 
+                <figcaption>
+                    Facade before
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/facade_out.jpg"> 
+                <figcaption>
+                    Facade after (Rotated about 3 deg)
+                </figcaption>
+            </figure>
+        </div>
+        <div class="gallery">
+            <figure >
+                <img src="outputs/facade_hist.png" class="figures"> 
+                <figcaption class="figures">
+                    Histograph showing gradient angles before and after
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/facade_graph.png" class="figures"> 
+                <figcaption class="figures">
+                    Orthogonal angles in the image vs. degree of rotation
+                </figcaption>
+            </figure>
+        </div>
+        <h5>Leaning tree</h5>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/leaning_tree.jpg"> 
+                <figcaption>
+                    Leaning tree before
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/leaning_tree_out.jpg"> 
+                <figcaption>
+                    Leaning tree after (Rotated about 25 deg)
+                </figcaption>
+            </figure>
+        </div>
+        <div class="gallery">
+            <figure>
+                <img src="outputs/leaning_tree_hist.png" class="figures"> 
+                <figcaption class="figures">
+                    Histogram showing gradient angles before and after
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/leaning_tree_graph.png" class="figures"> 
+                <figcaption class="figures">
+                    Orthogonal angles vs. degree of rotation
+                </figcaption>
+            </figure>
+        </div>
+        <h5>Welcome to Delaware, taken from a moving vehicle</h5>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/delaware.jpg"> 
+                <figcaption>
+                    Delaware before
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/delaware_out.jpg"> 
+                <figcaption>
+                    Delaware after (Rotated about 6 deg)
+                </figcaption>
+            </figure>
+        </div>
+        <div class="gallery">
+            <figure>
+                <img src="outputs/delaware_hist.png" class="figures"> 
+                <figcaption class="figures">
+                    Histogram showing gradient angles before and after
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/delaware_graph.png" class="figures"> 
+                <figcaption class="figures">
+                    Orthogonal angles vs. degree of rotation
+                </figcaption>
+            </figure>
+        </div>
+        <h5>Failure case: deck in the spring</h5>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/deck.jpg"> 
+                <figcaption>
+                    Deck before
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/deck_out.jpg"> 
+                <figcaption>
+                    Deck after (Rotated about 19 deg)
+                </figcaption>
+            </figure>
+        </div>
+        <div class="gallery">
+            <figure>
+                <img src="outputs/deck_hist.png" class="figures"> 
+                <figcaption class="figures">
+                    Histogram showing gradient angles before and after
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/deck_graph.png" class="figures"> 
+                <figcaption class="figures">
+                    Orthogonal angles vs. degree of rotation
+                </figcaption>
+            </figure>
+        </div>
+        <h3 id="frequencies">
+            Fun with Frequencies!
+        </h3>
+        <h4>
+            Image "Sharpening"
+        </h4>
+        <p>
+            As a first foray into the world of frequencies, we will "sharpen" images! By taking only the high frequency parts of an image and adding them into the original image, we can make images appear sharper since images with stronger high frequencies will pop more and appear sharper. Note that this does not actually make the image sharper and is just an illusion, since no additional information is being added to the image. We can implement this using one filter, known as the unsharp mask filter. When applied, we get the results shown below.
+        </p>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/taj_bw.jpg"> 
+                <figcaption>
+                    Taj Mahal before
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/taj_out.jpg"> 
+                <figcaption>
+                    Taj Mahal after
+                </figcaption>
+            </figure>
+        </div>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/pineapple_bw.jpg"> 
+                <figcaption>
+                    Pineapple Before
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/pineapple_out.jpg"> 
+                <figcaption>
+                    Pineapple after
+                </figcaption>
+            </figure>
+        </div>
+        <h4>
+            Hybrid Images
+        </h4>
+        <p>
+            Hybrid images are images that look like one thing from up close, and something different from far away. This affect is achieved by taking the high frequency components of one image and the low frequency components of another image and stacking them. From up close the viewer notices the high frequencies, and from far away the viewer can only make out the low frequencies. Here are some examples of such images.
+        </p>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/DerekPicture.jpg"> 
+                <figcaption>
+                    Derek
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="inputs/nutmeg.jpg"> 
+                <figcaption>
+                    Nutmeg
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/derek_cat1.jpg"> 
+                <figcaption>
+                    Derek-Nutmeg
+                </figcaption>
+            </figure>
+        </div>
+        <div class="gallery">
+            <figure>
+                <img src="outputs/derek_cat1.jpg" style="width: 100px;"> 
+            </figure>
+        </div>
+
+        <div class="gallery">
+            <figure>
+                <img src="inputs/hummer.jpg"> 
+                <figcaption>
+                    Hummer
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="inputs/tractor.jpg"> 
+                <figcaption>
+                    Tractor
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/hum_tract.jpg"> 
+                <figcaption>
+                    Hum-tractor
+                </figcaption>
+            </figure>
+        </div>
+        <div class="gallery">
+            <figure>
+                <img src="outputs/hum_tract1.jpg" style="width: 700px;"> 
+            </figure>
+        </div>
+
+        <div class="gallery">
+            <figure>
+                <img src="inputs/burger.jpg"> 
+                <figcaption>
+                    Burger
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="inputs/king.jpg"> 
+                <figcaption>
+                    King
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/burger_king.jpg"> 
+                <figcaption>
+                    Burger King
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="gallery">
+            <figure>
+                <img src="outputs/burger_fourier.jpg"> 
+                <figcaption>
+                    Burger Fourier
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/king_fourier.jpg"> 
+                <figcaption>
+                    King Fourier
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/burger_king_fourier.jpg"> 
+                <figcaption>
+                    Burger King Fourier
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="gallery">
+            <figure>
+                <img src="outputs/burger_blur_fourier.jpg"> 
+                <figcaption>
+                    Sharpened Burger Fourier
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/king_blur_fourier.jpg"> 
+                <figcaption>
+                    Blurred King Fourier
+                </figcaption>
+            </figure>
+    
+        </div>
+
+
+        <h4>
+            Bells & Whistles: Using color to enhance the effect
+        </h4>
+        <h4>
+            Gaussian and Laplacian Stacks
+        </h4>
+        <p>
+            A Gaussian stack is a set of image where each level of the stack gets progressively blurrier as it is passed through a low pass filter each time. A Laplacian stack is a stack where each layer represents a specific band of frequencies within that image. Here are examples of a gaussian and a laplacian stack on the painting "Lincoln in Dalivision" by Salvador Dali.
+        </p>
+        <h5>"Lincoln in Dalivision" by Salvador Dali</h5>
+        <div class="stack">
+            <img src="outputs/dg_0.jpg"> 
+            <img src="outputs/dg_2.jpg"> 
+            <img src="outputs/dg_4.jpg"> 
+            <img src="outputs/dg_8.jpg"> 
+            <img src="outputs/dg_16.jpg"> 
+        </div>
+        <div class="stack">
+            <img src="outputs/dl_16.jpg"> 
+            <img src="outputs/dl_8.jpg"> 
+            <img src="outputs/dl_4.jpg"> 
+            <img src="outputs/dl_2.jpg"> 
+            <img src="outputs/dl_0.jpg"> 
+        </div>
+        <h5>The hummer-tractor hybrid image</h5>
+        <div class="stack">
+            <img src="outputs/htg_0.jpg"> 
+            <img src="outputs/htg_2.jpg"> 
+            <img src="outputs/htg_4.jpg"> 
+            <img src="outputs/htg_8.jpg"> 
+            <img src="outputs/htg_16.jpg"> 
+        </div>
+        <div class="stack">
+            <img src="outputs/htl_16.jpg"> 
+            <img src="outputs/htl_8.jpg"> 
+            <img src="outputs/htl_4.jpg"> 
+            <img src="outputs/htl_2.jpg"> 
+            <img src="outputs/htl_0.jpg"> 
+        </div>
+        <h4>
+            Multiresolution Blending
+        </h4>
+        <p>
+            The Gaussian and Laplacian stacks in the previous section can be used to create smooth splines. 
+        </p>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/apple_bw.jpg"> 
+                <figcaption>
+                    Apple
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="inputs/orange_bw.jpg"> 
+                <figcaption>
+                    Orange
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/oraple.jpg"> 
+                <figcaption>
+                    Oraple
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="gallery">
+            <figure>
+                <img src="inputs/dog.jpg"> 
+                <figcaption>
+                    Dog
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="inputs/cat.PNG"> 
+                <figcaption>
+                    Cat
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="outputs/limy.jpg"> 
+                <figcaption>
+                    Cat-dog
+                </figcaption>
+            </figure>
+        </div>
+        <div class="gallery">
+            <figure>
+                <img src="inputs/hand.jpg"> 
+                <figcaption>
+                    Hand
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="inputs/eye.jpg"> 
+                <figcaption>
+                    Eye
+                </figcaption>
+            </figure>
+            <figure>
+                <img src="inputs/eyemask.jpg"> 
+                <figcaption>
+                    Mask
+                </figcaption>
+            </div>
+            <div class=gallery>
+            </figure>
+            <figure>
+                <img src="outputs/eye_hand.jpg"> 
+                <figcaption>
+                    Eye in Hand
+                </figcaption>
+            </figure>
+        </div>
+    </div>
+    <h3>Cool things learned</h3>
+    <p>
+        One of the most interesting things I learned over the course of this project was 
+    </p>
+    </body>
+</html>
